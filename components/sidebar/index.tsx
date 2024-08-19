@@ -1,0 +1,96 @@
+"use client";
+
+import { useTheme } from "next-themes";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
+import { menuOptions } from "@/constants/dashboard";
+import clsx from "clsx";
+import { Separator } from "../ui/separator";
+import { Database, GitBranch, LucideMousePointerClick } from "lucide-react";
+import { ModeToggle } from "../global/mode-toggle";
+
+const Sidebar = () => {
+  const pathName = usePathname();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
+  return (
+    <nav className="dark:bg-black h-screen overflow-x-hidden justify-between flex items-center flex-col gap-10 py-4">
+      <div className="flex items-center justify-center flex-col gap-8">
+        <Link className="flex px-4 gap-1 rounded-lg m-2" href="/">
+          <p className="text-lg font-semibold">To</p>
+          <Image
+            src="/fuzzieLogo.png"
+            width={8}
+            height={8}
+            alt="fuzzie logo"
+            className="shadow-sm"
+          />
+          <p className="text-lg font-semibold">Do</p>
+        </Link>
+        <TooltipProvider>
+          {menuOptions.map((menuItem) => (
+            <ul key={menuItem.name}>
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger>
+                  <li>
+                    <Link
+                      href={menuItem.href}
+                      className={clsx(
+                        "group h-8 w-8 flex items-center justify-center scale-[1.5] rounded-lg p-[3px] cursor-pointer",
+                        {
+                          "dark:bg-[#2F006B] bg-[#EEE0FF]":
+                            pathName === menuItem.href,
+                        }
+                      )}
+                    >
+                      <menuItem.Component
+                        selected={pathName === menuItem.href}
+                      />
+                    </Link>
+                  </li>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="right"
+                  className="bg-black/20 text-xs text-muted-foreground p-2 rounded-lg backdrop-blur-xl"
+                >
+                  {menuItem.name}
+                </TooltipContent>
+              </Tooltip>
+            </ul>
+          ))}
+        </TooltipProvider>
+        <Separator />
+        <div className="flex items-center flex-col gap-9 dark:bg-[#353346]/30 py-4 px-2 rounded-full h-56 overflow-x-hidden overflow-y-auto scrollbar-hidden border-[1px]">
+          <div className="relative dark:bg-[#353346]/70 p-2 rounded-full dark:border-t-[2px] border-[1px] dark:border-t-[#353346]">
+            <LucideMousePointerClick className="dark:text-white" size={18} />
+            <div className="border-l-2 border-muted-foreground/50 h-6 absolute left-1/2 transform translate-x-[-50%] -bottom-[30px]" />
+          </div>
+          <div className="relative dark:bg-[#353346]/70 p-2 rounded-full dark:border-t-[2px] border-[1px] dark:border-t-[#353346]">
+            <GitBranch className="dark:text-white" size={18} />
+            <div className="border-l-2 border-muted-foreground/50 h-6 absolute left-1/2 transform translate-x-[-50%] -bottom-[30px]" />
+          </div>
+          <div className="relative dark:bg-[#353346]/70 p-2 rounded-full dark:border-t-[2px] border-[1px] dark:border-t-[#353346]">
+            <Database className="dark:text-white" size={18} />
+            <div className="border-l-2 border-muted-foreground/50 h-6 absolute left-1/2 transform translate-x-[-50%] -bottom-[30px]" />
+          </div>
+          <div className="relative dark:bg-[#353346]/70 p-2 rounded-full dark:border-t-[2px] border-[1px] dark:border-t-[#353346]">
+            <LucideMousePointerClick className="dark:text-white" size={18} />
+          </div>
+        </div>
+      </div>
+      <div className="flex items-center justify-center flex-col gap-8">
+        <ModeToggle />
+      </div>
+    </nav>
+  );
+};
+
+export default Sidebar;
