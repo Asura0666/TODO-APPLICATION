@@ -3,7 +3,7 @@ import Link from "next/link";
 
 function NavBar() {
   return (
-    <div className=" w-full flex flex-col md:flex-row items-center justify-between text-white px-7 py-1 font-bold border-b border-solid border-zinc-100 leading-[154.5%]">
+    <div className=" w-full flex flex-col md:flex-row items-center justify-between text-black dark:text-white px-7 py-1 font-bold border-b border-solid border-zinc-100 leading-[154.5%]">
       {/* Logo and Branding */}
       <div className="flex items-center gap-2">
         <Link href="/" className="flex items-center gap-1 rounded-lg m-2">
