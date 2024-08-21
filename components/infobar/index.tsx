@@ -11,6 +11,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { UserButton } from "@clerk/nextjs";
+import TaskButton from "../task/task-button";
 
 type Props = {};
 
@@ -21,12 +22,13 @@ const InfoBar = (props: Props) => {
       {/* <span className="flex items-center gap-2 font-bold">
         <p className="text-sm font-light text-gray-300">Free</p>
       </span> */}
-      <span className="flex items-center rounded-full bg-muted px-4">
-        <Search />
+      <span className="flex items-center">
+        {/* <Search />
         <Input
           placeholder="Quick Search"
           className="border-none bg-transparent"
-        />
+        /> */}
+        <TaskButton/>
       </span>
       <TooltipProvider>
         <Tooltip delayDuration={0}>

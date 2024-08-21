@@ -5,12 +5,12 @@ import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import { Textarea } from "@/components/ui/textarea";
 
-type Props = {
-  type: "text" | "email" | "password";
+export type FormGenerateProps = {
+  type: "text" | "email" | "password" | "checkbox";
   inputType: "select" | "input" | "textarea";
   options?: { value: string; label: string; id: string }[];
   label?: string;
-  placeholder: string;
+  placeholder?: string;
   register: UseFormRegister<any>;
   name: string;
   errors: FieldErrors<FieldValues>;
@@ -31,31 +31,55 @@ const FormGenerator = ({
   label,
   lines,
   options,
-}: Props) => {
+}: FormGenerateProps) => {
   switch (inputType) {
     case "input":
-      return (
-        <Label htmlFor={`input-${label}`} className="flex flex-col gap-2">
-          {label && label}
-          <Input
-            id={`input-${label}`}
-            type={type}
-            placeholder={placeholder}
-            form={form}
-            defaultValue={defaultValue}
-            {...register(name)}
-          />
-          <ErrorMessage
-            errors={errors}
-            name={name}
-            render={({ message }) => (
-              <p className="text-red-400 mt-2">
-                {message === "Required" ? "" : message}
-              </p>
-            )}
-          />
-        </Label>
-      );
+      if (type === "checkbox") {
+        return (
+          <Label htmlFor={`input-${label}`} className="flex items-center gap-2">
+            <Input
+              id={`input-${label}`}
+              type={type}
+              form={form}
+              defaultValue={defaultValue}
+              {...register(name)}
+            />
+            {label && label}
+            <ErrorMessage
+              errors={errors}
+              name={name}
+              render={({ message }) => (
+                <p className="text-red-400 mt-2">
+                  {message === "Required" ? "" : message}
+                </p>
+              )}
+            />
+          </Label>
+        );
+      } else {
+        return (
+          <Label htmlFor={`input-${label}`} className="flex flex-col gap-2">
+            {label && label}
+            <Input
+              id={`input-${label}`}
+              type={type}
+              placeholder={placeholder}
+              form={form}
+              defaultValue={defaultValue}
+              {...register(name)}
+            />
+            <ErrorMessage
+              errors={errors}
+              name={name}
+              render={({ message }) => (
+                <p className="text-red-400 mt-2">
+                  {message === "Required" ? "" : message}
+                </p>
+              )}
+            />
+          </Label>
+        );
+      }
     case "select":
       return (
         <Label htmlFor={`select-${label}`}>
