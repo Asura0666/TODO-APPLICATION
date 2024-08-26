@@ -136,13 +136,20 @@ export const getTaskById = async ({ taskId }: { taskId: string }) => {
   }
 };
 
-export const createTask = async ({
-  status,
-  title,
-  deadLine,
-  description,
-}: TaskProps) => {
+export const createTask = async (
+  status: boolean,
+  title: string,
+  description: string | undefined,
+  deadLine: string,
+) => {
   try {
+    console.log(status, title, description, deadLine);
+
+    const parsedDate = new Date(deadLine);
+    if (isNaN(parsedDate.getTime())) {
+      throw new Error("Invalid date format");
+    }
+
     const user = await currentUser();
 
     if (!user) {
@@ -152,28 +159,90 @@ export const createTask = async ({
       };
     }
 
+    const userId = user.id;
+
     const createdTask = await client.task.create({
       data: {
         title,
         description,
-        dead_line: deadLine,
+        dead_line: parsedDate,
         status,
+        userId,
       },
     });
 
     return {
       status: 200,
-      data: createdTask,
+      data: {
+        id: createdTask.id,
+        title: createdTask.title,
+        description: createdTask.description,
+        dead_line: createdTask.dead_line.toISOString(), // Convert date to string
+        status: createdTask.status,
+      },
       message: "Task created successfully!",
     };
-  } catch (error) {
+  } catch (error:any) {
+    console.log(error);
     return {
       status: 500,
-      error: error,
+      error: error.message, // Convert error to string
       message: "Internal server error!",
     };
   }
 };
+
+
+// export const createTask = async (
+//   status: boolean,
+//   title: string,
+//   description: string | undefined,
+//   deadLine: string,
+// ) => {
+//   try {
+
+//     console.log(status, title, description, deadLine);
+
+//     const parsedDate = new Date(deadLine);
+//     if (isNaN(parsedDate.getTime())) {
+//       throw new Error("Invalid date format");
+//     }
+  
+
+//     const user = await currentUser();
+
+//     if (!user) {
+//       return {
+//         status: 401,
+//         message: "Unauthenticated!",
+//       };
+//     }
+
+//     const userId = user.id;
+
+//     const createdTask = await client.task.create({
+//       data: {
+//         title,
+//         description,
+//         dead_line: parsedDate,
+//         status,
+//         userId,
+//       },
+//     });
+
+//     return {
+//       status: 200,
+//       data: createdTask,
+//       message: "Task created successfully!",
+//     };
+//   } catch (error) {
+//     return {
+//       status: 500,
+//       error: error,
+//       message: "Internal server error!",
+//     };
+//   }
+// };
 
 export const updateTask = async ({
   title,

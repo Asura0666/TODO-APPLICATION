@@ -1,4 +1,3 @@
-"use client";
 
 import { createTask } from "@/actions/task";
 import { TaskProps, TaskSchema } from "@/schemas/task.schema";
@@ -30,7 +29,7 @@ const TaskForm = ({ subTitle, title }: Props) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isLoading },
+    formState: { errors, isSubmitting },
     setValue,
   } = useForm<TaskProps>({
     resolver: zodResolver(TaskSchema),
@@ -39,22 +38,16 @@ const TaskForm = ({ subTitle, title }: Props) => {
   const router = useRouter();
   const { setClose } = useModal();
 
-
   console.log("error: ", errors);
 
   const onSubmit: SubmitHandler<TaskProps> = async (values: TaskProps) => {
     try {
       console.log("values: ", values);
+      const {title, description, status, deadLine} = values;
 
-      const newValue: TaskProps = {
-        title: values.title,
-        description: values.description,
-        status: values.status,
-        deadLine: values.deadLine
-      };
-
-      const task = await createTask(newValue);
-
+      const formattedDate = deadLine.toISOString(); // Convert to ISO string
+      const task = await createTask(status, title, description, formattedDate);
+  
       if (task.status !== 200) {
         toast.error(task.message);
       }
@@ -69,7 +62,7 @@ const TaskForm = ({ subTitle, title }: Props) => {
   };
 
   return (
-    <Card className="w-full max-w-[650px] border-none">
+    <Card className="w-full max-w-[700px] border-none overflow-hidden">
       {title && subTitle && (
         <CardHeader>
           <CardTitle>{title}</CardTitle>
@@ -83,34 +76,44 @@ const TaskForm = ({ subTitle, title }: Props) => {
             onSubmit={handleSubmit(onSubmit)}
             className="w-full flex flex-col gap-10 justify-center items-center"
           >
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="title">Title</Label>
+            <div className="flex items-center gap-4 w-full">
+              <Label htmlFor="title" className="font-normal w-1/4">
+                Title
+              </Label>
               <Input
                 id="title"
                 placeholder="Give Title"
                 {...register("title")}
+                className="flex-1"
               />
             </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="description">Description</Label>
+            <div className="flex items-center gap-4 w-full">
+              <Label htmlFor="description" className="font-normal w-1/4">
+                Description
+              </Label>
               <Input
                 id="description"
                 placeholder="Give Description (optional)"
                 {...register("description")}
+                className="flex-1"
               />
             </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="deadLine">Deadline</Label>
+            <div className="flex items-center gap-4 w-full">
+              <Label htmlFor="deadLine" className="font-normal w-1/4">
+                Deadline
+              </Label>
               <DatePickerWithPresets
+                className="flex-1"
                 onChange={(date: any) => setValue("deadLine", date)} // Set the selected date in form
               />
             </div>
-            <div className="flex flex-col gap-2 w-full">
-              <Label>Status</Label>
+            <div className="flex items-center gap-4 w-full">
+              <Label className="font-normal w-1/4">Status</Label>
               <RadioGroup
-                onValueChange={(value: any) => setValue("status", value)}
-                className="flex gap-4"
-                defaultValue="incomplete"
+                onValueChange={(value: any) =>
+                  setValue("status", value === "true")
+                }
+                className="flex gap-4 flex-1"
               >
                 <Label className="flex items-center gap-2">
                   <RadioGroupItem value="true" />
@@ -123,12 +126,12 @@ const TaskForm = ({ subTitle, title }: Props) => {
               </RadioGroup>
             </div>
 
-            <div className=" w-full">
+            <div className="w-1/2 flex justify-center items-center">
               <Button
                 className="font-bold w-full transition-all tracking-tight self-start hover:bg-black hover:text-white border-[1px]"
-                disabled={isLoading}
+                disabled={isSubmitting}
               >
-                {isLoading ? <Spinner noPadding /> : <span>Add Task</span>}
+                {isSubmitting ? <Spinner noPadding /> : <span>Add Task</span>}
               </Button>
             </div>
           </form>
