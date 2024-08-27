@@ -1,4 +1,7 @@
 import { formatDate } from "@/lib/utils";
+import { Pen, Trash } from "lucide-react";
+import { Button } from "../ui/button";
+import DeleteTaskButton from "./delete-task-button";
 
 interface TaskData {
   task: {
@@ -15,23 +18,34 @@ interface TaskData {
 const TaskListItem = ({
   task: { createdAt, updatedAt, dead_line, status, description, title, id },
 }: TaskData) => {
+  
   return (
-    <article className="flex flex-col gap-4 rounded-lg p-5  hover:bg-[#EEE0FF]/10 shadow-md border">
+    <article className="flex flex-col gap-4 rounded-lg p-5  dark:hover:bg-[#EEE0FF]/10 hover:bg-[#EEE0FF] shadow-md border">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-semibold dark:text-cream/75 text-gravel">
           {title}
         </h2>
-        <span
-          className={`inline-block h-4 w-4 text-sm font-semibold rounded-full ${
-            status ? "bg-green-600/75" : "bg-red-600/75"
-          }`}
-        ></span>
+        <div className="flex items-center justify-center gap-2">
+          <DeleteTaskButton id={id}/>
+          <Button size="icon" className="dark:bg-cream/80">
+            <Pen size={20} />
+          </Button>
+          <Button size="icon" className="dark:bg-cream/80">
+            <span
+              className={`inline-block h-4 w-4 text-sm font-semibold rounded-full ${
+                status ? "bg-green-600/75" : "bg-red-600/75"
+              }`}
+            ></span>
+          </Button>
+        </div>
       </div>
-      <div className="text-cream/50">
+      <div className="dark:text-cream/50 text-gravel">
         {description ? (
           <p className="text-sm">{description}</p>
         ) : (
-          <p className="italic text-cream/50">No description available</p>
+          <p className="italic dark:text-cream/50 text-gravel">
+            No description available
+          </p>
         )}
       </div>
       <div className="flex justify-between items-center">

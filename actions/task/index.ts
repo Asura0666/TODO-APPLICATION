@@ -3,6 +3,7 @@
 import { client } from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
 import { Prisma } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 export const getFilteredTasks = async ({
   query = "",
@@ -215,56 +216,6 @@ export const createTask = async (
   }
 };
 
-// export const createTask = async (
-//   status: boolean,
-//   title: string,
-//   description: string | undefined,
-//   deadLine: string,
-// ) => {
-//   try {
-
-//     console.log(status, title, description, deadLine);
-
-//     const parsedDate = new Date(deadLine);
-//     if (isNaN(parsedDate.getTime())) {
-//       throw new Error("Invalid date format");
-//     }
-
-//     const user = await currentUser();
-
-//     if (!user) {
-//       return {
-//         status: 401,
-//         message: "Unauthenticated!",
-//       };
-//     }
-
-//     const userId = user.id;
-
-//     const createdTask = await client.task.create({
-//       data: {
-//         title,
-//         description,
-//         dead_line: parsedDate,
-//         status,
-//         userId,
-//       },
-//     });
-
-//     return {
-//       status: 200,
-//       data: createdTask,
-//       message: "Task created successfully!",
-//     };
-//   } catch (error) {
-//     return {
-//       status: 500,
-//       error: error,
-//       message: "Internal server error!",
-//     };
-//   }
-// };
-
 export const updateTask = async ({
   title,
   description,
@@ -402,7 +353,7 @@ export const deleteTask = async ({ taskId }: { taskId: string }) => {
       where: {
         id: taskId,
       },
-    });
+    })
 
     return {
       status: 200,

@@ -9,6 +9,7 @@ import { Input } from "../ui/input";
 import { TaskFilterProps } from "@/schemas/task.schema";
 import Select from "../ui/select";
 import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
 
 type Props = {
   defaultValues: TaskFilterProps;

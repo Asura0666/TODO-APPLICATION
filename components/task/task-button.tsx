@@ -1,8 +1,14 @@
-import { useModal } from '@/providers/modal-provider';
-import CustomModal from '../global/custom-modal';
-import TaskForm from './task-form';
-import { Button } from '../ui/button';
-import { Plus } from 'lucide-react';
+import { useModal } from "@/providers/modal-provider";
+import CustomModal from "../global/custom-modal";
+import TaskForm from "./task-form";
+import { Button } from "../ui/button";
+import { Plus } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 const TaskButton = () => {
   const { setOpen } = useModal();
@@ -19,9 +25,18 @@ const TaskButton = () => {
   };
 
   return (
-    <Button size="icon" onClick={handleClick}>
-      <Plus size={20}/>
-    </Button>
+    <TooltipProvider>
+      <Tooltip delayDuration={0}>
+        <TooltipTrigger>
+          <Button size="icon" onClick={handleClick}>
+            <Plus size={20} />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Add Task</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };
 
