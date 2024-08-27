@@ -30,8 +30,8 @@ export const getFilteredTasks = async ({
     const userId = user.id;
 
     const taskPerPage = 5;
-    const skip = page > 0 ? (page - 1) * taskPerPage : 0; 
-    
+    const skip = page > 0 ? (page - 1) * taskPerPage : 0;
+
     const filters: Prisma.TaskWhereInput = {
       userId,
 
@@ -225,7 +225,7 @@ export const updateTask = async ({
 }: {
   title?: string;
   description?: string;
-  deadLine?: Date;
+  deadLine?: string;
   status?: boolean;
   taskId: string;
 }) => {
@@ -237,6 +237,14 @@ export const updateTask = async ({
         status: 401,
         message: "Unauthenticated!",
       };
+    }
+
+    let parsedDate;
+    if (deadLine) {
+      parsedDate = new Date(deadLine);
+      if (isNaN(parsedDate.getTime())) {
+        throw new Error("Invalid date format");
+      }
     }
 
     const task = await client.task.findUnique({
@@ -259,7 +267,7 @@ export const updateTask = async ({
       data: {
         ...(title && { title }),
         ...(description && { description }),
-        ...(deadLine && { dead_line: deadLine }),
+        ...(deadLine && { dead_line: parsedDate }),
         ...(status !== undefined && { status }),
       },
     });
@@ -353,7 +361,7 @@ export const deleteTask = async ({ taskId }: { taskId: string }) => {
       where: {
         id: taskId,
       },
-    })
+    });
 
     return {
       status: 200,

@@ -1,49 +1,29 @@
 import { useModal } from "@/providers/modal-provider";
 import { Button } from "../ui/button";
-import { Trash } from "lucide-react";
+import { Pen } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
-import CustomAlert from "../global/custom-alert";
 import { deleteTask } from "@/actions/task";
 import { toast } from "sonner";
+import CustomDialog from "../global/custom-dialog";
+import EditTaskForm from "./edit-task-form";
 
-const DeleteTaskButton = ({ id }: { id: string }) => {
+const EditTaskButton = ({ id }: { id: string }) => {
   const { setOpen } = useModal();
-
-  const onSubmit = async () => {
-    try {
-      const res = await deleteTask({ taskId: id });
-
-      if (res.status === 200) {
-        toast.success(res.message);
-      } else {
-        toast.error(res.message);
-      }
-
-    } catch (error: any) {
-      console.error(error.message);
-    }
-  };
 
   const handleClick = () => {
     setOpen(
-      <CustomAlert
+      <CustomDialog
         title="Are you absolutely sure?"
         subheading="This action cannot be undone. This will permanently delete your task and remove your task data from our servers."
       >
-        <Button
-          className="bg-red-700 hover:bg-red-500 dark:text-cream/75"
-          onClick={onSubmit}
-        >
-          Delete
-        </Button>
-      </CustomAlert>
+        <EditTaskForm id={id}/>
+      </CustomDialog>
     );
-
   };
 
   return (
@@ -55,15 +35,15 @@ const DeleteTaskButton = ({ id }: { id: string }) => {
             className="dark:bg-cream/80"
             onClick={handleClick}
           >
-            <Trash size={20} />
+            <Pen size={20} />
           </Button>
         </TooltipTrigger>
         <TooltipContent>
-          <p>Delete Task</p>
+          <p>Edit Task</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );
 };
 
-export default DeleteTaskButton;
+export default EditTaskButton;

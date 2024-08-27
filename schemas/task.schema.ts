@@ -1,4 +1,4 @@
-import { z, ZodType } from "zod";
+import { string, z, ZodType } from "zod";
 
 export type TaskProps = {
   title: string;
@@ -14,6 +14,20 @@ export const TaskSchema: ZodType<TaskProps> = z.object({
   description: z.string().optional(),
   deadLine: z.date(),
   status: z.boolean(),
+});
+
+export type EditTaskProps = {
+  title?: string;
+  description?: string;
+  deadLine?: Date;
+  status?: boolean;
+};
+
+export const EditTaskSchema: ZodType<EditTaskProps> = z.object({
+  title: z.string().optional(),
+  description: z.string().optional(),
+  deadLine: z.date().optional(),
+  status: z.boolean().optional(),
 });
 
 export type TaskFilterProps = {

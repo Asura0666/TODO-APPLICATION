@@ -28,7 +28,11 @@ const TaskButton = () => {
     <TooltipProvider>
       <Tooltip delayDuration={0}>
         <TooltipTrigger>
-          <Button size="icon" onClick={handleClick}>
+          <Button
+            size="icon"
+            onClick={handleClick}
+            className="dark:bg-cream/80"
+          >
             <Plus size={20} />
           </Button>
         </TooltipTrigger>

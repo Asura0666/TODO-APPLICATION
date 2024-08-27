@@ -1,6 +1,10 @@
-
-import { createTask } from "@/actions/task";
-import { TaskProps, TaskSchema } from "@/schemas/task.schema";
+import { createTask, updateTask } from "@/actions/task";
+import {
+  EditTaskProps,
+  EditTaskSchema,
+  TaskProps,
+  TaskSchema,
+} from "@/schemas/task.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -23,16 +27,17 @@ import { useModal } from "@/providers/modal-provider";
 type Props = {
   title?: string;
   subTitle?: string;
+  id: string;
 };
 
-const TaskForm = ({ subTitle, title }: Props) => {
+const EditTaskForm = ({ subTitle, title, id }: Props) => {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     setValue,
-  } = useForm<TaskProps>({
-    resolver: zodResolver(TaskSchema),
+  } = useForm<EditTaskProps>({
+    resolver: zodResolver(EditTaskSchema),
   });
 
   const router = useRouter();
@@ -40,19 +45,27 @@ const TaskForm = ({ subTitle, title }: Props) => {
 
   // console.log("error: ", errors);
 
-  const onSubmit: SubmitHandler<TaskProps> = async (values: TaskProps) => {
+  const onSubmit: SubmitHandler<EditTaskProps> = async (
+    values: EditTaskProps
+  ) => {
     try {
       // console.log("values: ", values);
-      const {title, description, status, deadLine} = values;
+      const { title, description, status, deadLine } = values;
 
-      const formattedDate = deadLine.toISOString(); // Convert to ISO string
-      const task = await createTask(status, title, description, formattedDate);
-  
-      if (task.status !== 200) {
-        toast.error(task.message);
+      const formattedDate = deadLine ? deadLine.toISOString() : ""; // Convert to ISO string
+      const updatedTask = await updateTask({
+        status,
+        title,
+        description,
+        deadLine: formattedDate,
+        taskId: id,
+      });
+
+      if (updatedTask.status !== 200) {
+        toast.error(updatedTask.message);
       }
 
-      toast.success(task.message);
+      toast.success(updatedTask.message);
       router.refresh();
 
       setClose();
@@ -131,7 +144,7 @@ const TaskForm = ({ subTitle, title }: Props) => {
                 className="font-bold w-full transition-all tracking-tight self-start hover:bg-black hover:text-white border-[1px]"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? <Spinner noPadding /> : <span>Add Task</span>}
+                {isSubmitting ? <Spinner noPadding /> : <span>Edit Task</span>}
               </Button>
             </div>
           </form>
@@ -141,4 +154,4 @@ const TaskForm = ({ subTitle, title }: Props) => {
   );
 };
 
-export default TaskForm;
+export default EditTaskForm;
