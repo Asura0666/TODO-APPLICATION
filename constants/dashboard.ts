@@ -9,5 +9,5 @@ export const menuOptions = [
   { name: "Dashboard", Component: Home, href: "/dashboard" },
   { name: "Tasks", Component: Workflows, href: "/tasks" },
   { name: "Settings", Component: Settings, href: "/setting" },
-  { name: "Logs", Component: Logs, href: "/logs" },
+  { name: "Feedback", Component: Logs, href: "/feedback" },
 ];

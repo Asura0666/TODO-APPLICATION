@@ -7,7 +7,7 @@ type Props = {
 
 const Layout = ({ children }: Props) => {
   return (
-    <div className="flex overflow-hidden h-screen">
+    <div className="flex overflow-auto scrollbar-hidden h-screen">
       <Sidebar />
       <div className="w-full">
         <InfoBar />
