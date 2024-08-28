@@ -1,8 +1,8 @@
 import { z, ZodType } from "zod";
 
 export type FeedbackProps = {
-  issue: String;
-  description: String;
+  issue: string;
+  description: string;
 };
 
 export const FeedbackSchema: ZodType<FeedbackProps>  = z.object({

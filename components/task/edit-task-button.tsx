@@ -21,7 +21,7 @@ const EditTaskButton = ({ id }: { id: string }) => {
         title="Are you absolutely sure?"
         subheading="This action cannot be undone. This will permanently delete your task and remove your task data from our servers."
       >
-        <EditTaskForm id={id}/>
+        <EditTaskForm id={id} />
       </CustomDialog>
     );
   };
@@ -32,10 +32,10 @@ const EditTaskButton = ({ id }: { id: string }) => {
         <TooltipTrigger>
           <Button
             size="icon"
-            className="dark:bg-cream/80"
+            className="dark:bg-cream/80 dark:hover:bg-[#2F006B] dark:text-black dark:hover:text-white transition-all"
             onClick={handleClick}
           >
-            <Pen size={20} />
+            <Pen size={20} className="" />
           </Button>
         </TooltipTrigger>
         <TooltipContent>

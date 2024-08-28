@@ -31,7 +31,7 @@ const TaskButton = () => {
           <Button
             size="icon"
             onClick={handleClick}
-            className="dark:bg-cream/80"
+            className="dark:bg-cream/80 dark:hover:bg-[#2F006B] dark:text-black dark:hover:text-white transition-all"
           >
             <Plus size={20} />
           </Button>

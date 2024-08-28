@@ -52,7 +52,7 @@ const DeleteTaskButton = ({ id }: { id: string }) => {
         <TooltipTrigger>
           <Button
             size="icon"
-            className="dark:bg-cream/80"
+            className="dark:bg-cream/80 dark:hover:bg-[#2F006B] dark:text-black dark:hover:text-white transition-all"
             onClick={handleClick}
           >
             <Trash size={20} />
